@@ -265,6 +265,7 @@ class EclipseJavaParser implements Parser {
     return files.stream().map(Path::toString).toArray(String[]::new);
   }
 
+  // hahahaha
   private ParseResult buildCFA(CompilationUnit ast, Scope scope)
       throws IOException, JParserException {
 
