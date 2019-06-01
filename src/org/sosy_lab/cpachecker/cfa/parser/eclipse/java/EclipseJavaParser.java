@@ -266,6 +266,7 @@ class EclipseJavaParser implements Parser {
   }
 
   // hahahaha
+  // gasteig is fun
   private ParseResult buildCFA(CompilationUnit ast, Scope scope)
       throws IOException, JParserException {
 
