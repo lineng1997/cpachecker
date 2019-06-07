@@ -267,6 +267,7 @@ class EclipseJavaParser implements Parser {
 
   // hahahaha
   // gasteig is fun
+  // test again
   private ParseResult buildCFA(CompilationUnit ast, Scope scope)
       throws IOException, JParserException {
 
@@ -278,9 +279,9 @@ class EclipseJavaParser implements Parser {
     CFABuilder builder = new CFABuilder(logger, scope);
     try {
 
-      ast.accept(builder);
+      ast.accept(builder); //builder muss Visitor sein, damit es kompiliert
 
-      while (scope.hasLocalClassPending()) {
+      while (scope.hasLocalClassPending()) { //local class: Klasse, die in anderer Datei definiert wird, daher sieht man auch Thundering und Take...
         AnonymousClassDeclaration nextLocalClassToBeParsed = scope.getNextLocalClass();
         nextLocalClassToBeParsed.accept(builder);
       }

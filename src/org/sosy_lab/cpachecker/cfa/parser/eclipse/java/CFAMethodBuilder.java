@@ -63,6 +63,7 @@ import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.SuperConstructorInvocation;
 import org.eclipse.jdt.core.dom.SwitchCase;
 import org.eclipse.jdt.core.dom.SwitchStatement;
+import org.eclipse.jdt.core.dom.ThrowStatement;
 import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 import org.eclipse.jdt.core.dom.WhileStatement;
 import org.sosy_lab.common.log.LogManager;
@@ -113,6 +114,8 @@ import org.sosy_lab.cpachecker.cfa.types.java.JClassOrInterfaceType;
 import org.sosy_lab.cpachecker.cfa.types.java.JClassType;
 import org.sosy_lab.cpachecker.cfa.types.java.JConstructorType;
 import org.sosy_lab.cpachecker.cfa.types.java.JType;
+import org.sosy_lab.cpachecker.core.counterexample.CFAEdgeWithAdditionalInfo;
+import org.sosy_lab.cpachecker.util.CFAEdgeUtils;
 import org.sosy_lab.cpachecker.util.CFATraversal;
 import org.sosy_lab.cpachecker.util.CFAUtils;
 import org.sosy_lab.cpachecker.util.Pair;
@@ -216,6 +219,25 @@ class CFAMethodBuilder extends ASTVisitor {
 
       mDeclaration.getBody().accept(this);
     }
+
+    return SKIP_CHILDS;
+  }
+
+  //Testing: throw statement von Exceptions zu beschriften
+  public boolean visit(ThrowStatement ts) {
+    //prevNode: N4
+    CFANode prevNode = locStack.getFirst();
+    FileLocation fileLocation = astCreator.getFileLocation(ts);
+    //successor: N0
+    CFANode successor = cfa.getExitNode();
+    String rawStatement = ts.getExpression().toString();
+    String description = ts.toString();
+    //newEdge: N4 -> N0
+    BlankEdge newEdge = new BlankEdge(rawStatement, fileLocation, prevNode, successor, description);
+    //prevNode.addLeavingEdge(newEdge);
+    addToCFA(newEdge);
+
+    //ts.accept(this);
 
     return SKIP_CHILDS;
   }
