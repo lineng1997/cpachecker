@@ -223,18 +223,17 @@ class CFAMethodBuilder extends ASTVisitor {
     return SKIP_CHILDS;
   }
 
-  //Testing: throw statement von Exceptions zu beschriften
+  //Testing: ThrowStatement von Exceptions zu beschriften
   public boolean visit(ThrowStatement ts) {
-    //prevNode: N4
+    //prevNode: N4, N7
     CFANode prevNode = locStack.getFirst();
     FileLocation fileLocation = astCreator.getFileLocation(ts);
     //successor: N0
     CFANode successor = cfa.getExitNode();
     String rawStatement = ts.getExpression().toString();
     String description = ts.toString();
-    //newEdge: N4 -> N0
+    //newEdge: N4 -> N0, N7 -> N0
     BlankEdge newEdge = new BlankEdge(rawStatement, fileLocation, prevNode, successor, description);
-    //prevNode.addLeavingEdge(newEdge);
     addToCFA(newEdge);
 
     //ts.accept(this);
